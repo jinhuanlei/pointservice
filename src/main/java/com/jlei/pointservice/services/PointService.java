@@ -31,11 +31,11 @@ public class PointService {
       var p = list.get(index);
       assert p.getRemain() > 0;
       if (p.getRemain() >= spent) {
-        spent = 0;
         addPointsToPayerMap(payerMap, p.getPayer(), -spent);
         // add negative transaction
         transactionRepository.add(DataBuilder.buildSpendingTransaction(p.getPayer(), -spent));
         p.setRemain(p.getRemain() - spent);
+        spent = 0;
       } else {
         spent -= p.getRemain();
         addPointsToPayerMap(payerMap, p.getPayer(), -p.getRemain());

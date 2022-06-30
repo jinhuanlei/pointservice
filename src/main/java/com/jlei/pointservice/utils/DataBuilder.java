@@ -1,6 +1,7 @@
 package com.jlei.pointservice.utils;
 
 import com.jlei.pointservice.models.Payer;
+import com.jlei.pointservice.models.PayerList;
 import com.jlei.pointservice.models.Transaction;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,6 +14,12 @@ public class DataBuilder {
   public static Transaction buildNewTransaction(Transaction t) {
     return Transaction.builder().points(t.getPoints()).payer(t.getPayer())
         .timestamp(new Date(System.currentTimeMillis())).build();
+  }
+
+  public static PayerList buildPayerList(List<Payer> payerList){
+    var pl = new PayerList();
+    pl.setPayers(payerList);
+    return pl;
   }
 
   public static Transaction buildSpendingTransaction(String payer, int points) {

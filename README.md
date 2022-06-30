@@ -28,6 +28,11 @@ OpenJDK Runtime Environment (build 17.0.3.1+2-LTS)
 OpenJDK 64-Bit Server VM (build 17.0.3.1+2-LTS, mixed mode, sharing)
 ```
 
+3. run the jar file
+```clone the project and go to the project folder
+java -jar pointservice-0.0.1-SNAPSHOT.jar
+```
+
 ### Option 2: Run the service by Docker
 
 ### Trouble Shooting
@@ -40,5 +45,5 @@ For further reference, please consider the following sections:
 ## Assumptions
 
 1. Payer cannot go lower than negative points, so first transaction(with the earliest timestamp)
-   cannot be processed.
-2. Cannot send transaction with 0 point
+   will be rejected by server.
+2. Cannot send transaction with 0 point.
