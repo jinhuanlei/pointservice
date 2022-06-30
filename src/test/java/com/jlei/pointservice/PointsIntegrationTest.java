@@ -50,9 +50,18 @@ class PointsIntegrationTest {
   }
 
   @Test
-  public void testSpendNegativePoints() {
+  public void testSpendTooLargePoints() {
     var pq = new PointRequest();
     pq.setPoints(5000);
+    var responseEntity = this.restTemplate
+        .postForEntity("http://localhost:" + port + "/points", pq, PayerList.class);
+    assertEquals(403, responseEntity.getStatusCodeValue());
+  }
+
+  @Test
+  public void testSpendNegativePoints() {
+    var pq = new PointRequest();
+    pq.setPoints(-5);
     var responseEntity = this.restTemplate
         .postForEntity("http://localhost:" + port + "/points", pq, PayerList.class);
     assertEquals(403, responseEntity.getStatusCodeValue());

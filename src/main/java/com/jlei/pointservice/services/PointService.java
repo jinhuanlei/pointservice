@@ -2,6 +2,7 @@ package com.jlei.pointservice.services;
 
 import static com.jlei.pointservice.utils.DataBuilder.buildPayedPoints;
 
+import com.jlei.pointservice.exceptions.SpendPointsLowerThanZeroException;
 import com.jlei.pointservice.exceptions.TotalPointsLowerThanZeroException;
 import com.jlei.pointservice.models.Payer;
 import com.jlei.pointservice.repositories.TransactionRepository;
@@ -19,7 +20,11 @@ public class PointService {
 
   private TransactionRepository transactionRepository;
 
-  public List<Payer> usePoints(Integer spent) throws TotalPointsLowerThanZeroException {
+  public List<Payer> usePoints(Integer spent)
+      throws TotalPointsLowerThanZeroException, SpendPointsLowerThanZeroException {
+    if(spent < 0){
+      throw new SpendPointsLowerThanZeroException();
+    }
     if (transactionRepository.getTotalPoints() - spent < 0) {
       throw new TotalPointsLowerThanZeroException();
     }

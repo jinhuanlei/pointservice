@@ -1,5 +1,6 @@
 package com.jlei.pointservice.controllers;
 
+import com.jlei.pointservice.exceptions.SpendPointsLowerThanZeroException;
 import com.jlei.pointservice.exceptions.TotalPointsLowerThanZeroException;
 import com.jlei.pointservice.models.PayerList;
 import com.jlei.pointservice.models.PointRequest;
@@ -26,6 +27,11 @@ public class PointController {
       return DataBuilder.buildPayerList(pointService.usePoints(pointRequest.getPoints()));
     } catch (TotalPointsLowerThanZeroException e) {
       var reason = "Total Points can not lower than 0";
+      var status = HttpStatus.FORBIDDEN;
+      throw new ResponseStatusException(
+          status, reason, e);
+    } catch (SpendPointsLowerThanZeroException e){
+      var reason = "Points can not lower than 0";
       var status = HttpStatus.FORBIDDEN;
       throw new ResponseStatusException(
           status, reason, e);

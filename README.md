@@ -28,12 +28,58 @@ OpenJDK Runtime Environment (build 17.0.3.1+2-LTS)
 OpenJDK 64-Bit Server VM (build 17.0.3.1+2-LTS, mixed mode, sharing)
 ```
 
-3. run the jar file
+3. run the application
+
 ```clone the project and go to the project folder
 java -jar pointservice-0.0.1-SNAPSHOT.jar
 ```
 
+4. run the tests
+
+```
+brew install mvn
+mvn compile
+mvn test
+```
+
 ### Option 2: Run the service by Docker
+
+```
+docker run -p 8080:8080 jinhuanlei/point-service
+```
+
+## Web API
+
+### transaction endpoints
+Add a transaction `POST /transactions`
+
+
+```json
+{ "payer": "DANNON", "points": 200, "timestamp": "2020-10-31T15:00:00Z" }
+```
+
+Example: 
+```
+curl --location --request POST 'localhost:8080/transactions' \
+--header 'Content-Type: application/json' \
+--data-raw '{ "payer": "DANNON", "points": 200, "timestamp": "2020-10-31T15:00:00Z" }'
+```
+
+### Points endpoints
+Get points: `GET /points`
+
+```
+curl --location --request GET 'localhost:8080/points'
+```
+
+Spend Points `POST /points`
+
+```
+curl --location --request POST 'localhost:8080/points' \
+--header 'Content-Type: application/json' \
+--data-raw '{ "points": 1 }'
+```
+
 
 ### Trouble Shooting
 
