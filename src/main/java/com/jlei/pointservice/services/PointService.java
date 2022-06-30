@@ -1,17 +1,20 @@
 package com.jlei.pointservice.services;
 
-import com.jlei.pointservice.repositories.PointRepository;
+import com.jlei.pointservice.models.Points;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class PointService implements ServiceInterface<Integer> {
+public class PointService {
 
-  private PointRepository pointRepository;
 
-  @Override
-  public void add(Integer integer) {
-    pointRepository.add(integer);
+  public void usePoints(Integer integer) {
+
+  }
+
+  public List<Points> getAllRemainingPoints(){
+    return null;
   }
 }
