@@ -25,7 +25,7 @@ public class PointController {
     try {
       return DataBuilder.buildPayerList(pointService.usePoints(pointRequest.getPoints()));
     } catch (TotalPointsLowerThanZeroException e) {
-      var reason = "Points can not lower than 0";
+      var reason = "Total Points can not lower than 0";
       var status = HttpStatus.FORBIDDEN;
       throw new ResponseStatusException(
           status, reason, e);

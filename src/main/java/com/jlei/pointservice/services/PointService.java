@@ -20,7 +20,7 @@ public class PointService {
   private TransactionRepository transactionRepository;
 
   public List<Payer> usePoints(Integer spent) throws TotalPointsLowerThanZeroException {
-    if (transactionRepository.getTotalPoints() + spent < 0) {
+    if (transactionRepository.getTotalPoints() - spent < 0) {
       throw new TotalPointsLowerThanZeroException();
     }
     var list = transactionRepository.getAllAvailablePoints();
