@@ -37,4 +37,8 @@ For further reference, please consider the following sections:
 * Have issue to switch different Java version, please
   check [this](https://stackoverflow.com/questions/26252591/mac-os-x-and-multiple-java-versions)
 
+## Assumptions
 
+1. Payer cannot go lower than negative points, so first transaction(with the earliest timestamp)
+   cannot be processed.
+2. Cannot send transaction with 0 point

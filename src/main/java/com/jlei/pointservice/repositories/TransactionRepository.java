@@ -1,7 +1,9 @@
 package com.jlei.pointservice.repositories;
 
 import com.jlei.pointservice.MockDatabase;
+import com.jlei.pointservice.models.Point;
 import com.jlei.pointservice.models.Transaction;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +52,7 @@ public class TransactionRepository {
     return count;
   }
 
-  public Map<String, Integer> getPointsByPayer() {
+  public Map<String, Integer> getPointsGroupByPayer() {
     var map = new HashMap<String, Integer>();
     var transactions = getAllTransaction();
     for (Transaction t : transactions) {
@@ -62,5 +64,62 @@ public class TransactionRepository {
       }
     }
     return map;
+  }
+
+  public List<Point> getAllAvailablePoints(){
+    var res = new ArrayList<Point>();
+    var map = getPointsGroupByPayer();
+    for(Map.Entry<String, Integer> e : map.entrySet()){
+      res.addAll(getAvailablePointsByPayer(e.getKey()));
+    }
+    return res;
+  }
+
+  public List<Point> getAvailablePointsByPayer(String payer) {
+    var payerTransactions = getTransactionsByPayer(payer);
+    List<Point> temp = new ArrayList<>();
+    for (Transaction t : payerTransactions) {
+      if (temp.size() == 0 || t.getPoints() > 0) {
+        var p = Point.builder().points(t.getPoints()).payer(t.getPayer()).remain(t.getPoints())
+            .timestamp(t.getTimestamp()).build();
+        temp.add(p);
+      } else if (t.getPoints() == 0) {
+        throw new RuntimeException("Transaction should not contain zero points");
+      } else if (t.getPoints() < 0) {
+        assert temp.size() > 0;
+        int cur = t.getPoints();
+        int index = 0;
+        while (index < temp.size() && cur < 0) {
+          Point p = temp.get(index);
+          assert p.getRemain() > 0;
+          if (p.getRemain() + cur >= 0) {
+            p.setRemain(p.getRemain() + cur);
+            break;
+          } else {
+            cur += p.getRemain();
+            p.setRemain(0);
+          }
+          index++;
+        }
+      }
+    }
+    List<Point> res = new ArrayList<>();
+    for (Point p : temp) {
+      if (p.getRemain() > 0) {
+        res.add(p);
+      }
+    }
+    return res;
+  }
+
+  public List<Transaction> getTransactionsByPayer(String payer) {
+    var list = new ArrayList<Transaction>();
+    var transactions = getAllTransaction();
+    for (Transaction t : transactions) {
+      if (t.getPayer().equals(payer)) {
+        list.add(t);
+      }
+    }
+    return list;
   }
 }

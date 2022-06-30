@@ -1,10 +1,14 @@
 package com.jlei.pointservice.models;
 
-import javax.validation.constraints.NotNull;
+import java.util.Date;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class Point {
-
-  @NotNull Integer points;
+  Date timestamp;
+  String payer;
+  int points;
+  int remain;
 }

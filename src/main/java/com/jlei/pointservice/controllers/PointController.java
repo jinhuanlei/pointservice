@@ -2,7 +2,7 @@ package com.jlei.pointservice.controllers;
 
 import com.jlei.pointservice.exceptions.TotalPointsLowerThanZeroException;
 import com.jlei.pointservice.models.Payer;
-import com.jlei.pointservice.models.Point;
+import com.jlei.pointservice.models.PointRequest;
 import com.jlei.pointservice.services.PointService;
 import java.util.List;
 import javax.validation.Valid;
@@ -21,16 +21,15 @@ public class PointController {
   private PointService pointService;
 
   @PostMapping("/points")
-  public Integer points(@Valid @RequestBody Point point) {
+  public List<Payer> points(@Valid @RequestBody PointRequest pointRequest) {
     try {
-      pointService.usePoints(point.getPoints());
+      return pointService.usePoints(pointRequest.getPoints());
     } catch (TotalPointsLowerThanZeroException e) {
       var reason = "Points can not lower than 0";
       var status = HttpStatus.FORBIDDEN;
       throw new ResponseStatusException(
           status, reason, e);
     }
-    return null;
   }
 
   @GetMapping("/points")
