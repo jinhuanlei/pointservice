@@ -1,12 +1,12 @@
 package com.jlei.pointservice.services;
 
+import static com.jlei.pointservice.utils.DataBuilder.buildPayedPoints;
+
 import com.jlei.pointservice.exceptions.TotalPointsLowerThanZeroException;
 import com.jlei.pointservice.models.Payer;
-import com.jlei.pointservice.models.Point;
 import com.jlei.pointservice.repositories.TransactionRepository;
 import com.jlei.pointservice.utils.DataBuilder;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,34 +25,39 @@ public class PointService {
     }
     var list = transactionRepository.getAllAvailablePoints();
     var payerMap = new HashMap<String, Integer>();
-    sort(list);
     int index = 0;
 
     while (index < list.size() && spent > 0) {
       var p = list.get(index);
       assert p.getRemain() > 0;
-      if(p.getRemain() > spent){
-
+      if (p.getRemain() >= spent) {
+        spent = 0;
+        addPointsToPayerMap(payerMap, p.getPayer(), -spent);
+        // add negative transaction
+        transactionRepository.add(DataBuilder.buildSpendingTransaction(p.getPayer(), -spent));
+        p.setRemain(p.getRemain() - spent);
+      } else {
+        spent -= p.getRemain();
+        addPointsToPayerMap(payerMap, p.getPayer(), -p.getRemain());
+        //add negative transaction
+        transactionRepository.add(
+            DataBuilder.buildSpendingTransaction(p.getPayer(), -p.getRemain()));
+        p.setRemain(0);
       }
       index++;
     }
-    return null;
+    return buildPayedPoints(payerMap);
   }
 
-  public void createSpendingTransaction(){
-
+  public void addPointsToPayerMap(Map<String, Integer> payerMap, String payer, int points) {
+    if (payerMap.containsKey(payer)) {
+      payerMap.put(payer, payerMap.get(payerMap) + points);
+    }
+    payerMap.put(payer, points);
   }
 
-  public void sort(List<Point> list) {
-    Collections.sort(list, (t1, t2) -> {
-      if (t1.getTimestamp().before(t2.getTimestamp())) {
-        return -1;
-      } else if (t1.getTimestamp().after(t2.getTimestamp())) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
+  public void createSpendingTransaction() {
+
   }
 
   public List<Payer> getAllRemainingPoints() {

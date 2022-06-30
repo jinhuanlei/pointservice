@@ -21,7 +21,7 @@ public class TransactionController {
 
 
   @PostMapping("/transactions")
-  public void transactions(@Valid @RequestBody Transaction t) {
+  public String transactions(@Valid @RequestBody Transaction t) {
     try {
       transactionService.add(t);
     } catch (PayerPointsLowerThanZeroException e) {
@@ -34,11 +34,12 @@ public class TransactionController {
       var status = HttpStatus.FORBIDDEN;
       throw new ResponseStatusException(
           status, reason, e);
-    } catch (ZeroPointTransactionException e){
+    } catch (ZeroPointTransactionException e) {
       var reason = "Points for transaction cannot be zero, its meaningless";
       var status = HttpStatus.FORBIDDEN;
       throw new ResponseStatusException(
           status, reason, e);
     }
+    return "Transaction added";
   }
 }

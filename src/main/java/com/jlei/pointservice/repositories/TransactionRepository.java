@@ -66,13 +66,26 @@ public class TransactionRepository {
     return map;
   }
 
-  public List<Point> getAllAvailablePoints(){
+  public List<Point> getAllAvailablePoints() {
     var res = new ArrayList<Point>();
     var map = getPointsGroupByPayer();
-    for(Map.Entry<String, Integer> e : map.entrySet()){
+    for (Map.Entry<String, Integer> e : map.entrySet()) {
       res.addAll(getAvailablePointsByPayer(e.getKey()));
     }
+    Collections.sort(res, (t1, t2) -> {
+      if (t1.getTimestamp().before(t2.getTimestamp())) {
+        return -1;
+      } else if (t1.getTimestamp().after(t2.getTimestamp())) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
     return res;
+  }
+
+  public void sort(List<Point> list) {
+
   }
 
   public List<Point> getAvailablePointsByPayer(String payer) {
