@@ -3,7 +3,9 @@ package com.jlei.pointservice.repositories;
 import com.jlei.pointservice.MockDatabase;
 import com.jlei.pointservice.models.Transaction;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -35,9 +37,30 @@ public class TransactionRepository {
         transactionsDbInstance.size());
   }
 
-  public List<Transaction> getAll() {
+  public List<Transaction> getAllTransaction() {
     return transactionsDbInstance;
   }
 
 
+  public int getTotalPoints() {
+    int count = 0;
+    for (Transaction t : transactionsDbInstance) {
+      count += t.getPoints();
+    }
+    return count;
+  }
+
+  public Map<String, Integer> getPointsByPayer() {
+    var map = new HashMap<String, Integer>();
+    var transactions = getAllTransaction();
+    for (Transaction t : transactions) {
+      var key = t.getPayer();
+      if (map.containsKey(key)) {
+        map.put(key, map.get(key) + t.getPoints());
+      } else {
+        map.put(key, t.getPoints());
+      }
+    }
+    return map;
+  }
 }

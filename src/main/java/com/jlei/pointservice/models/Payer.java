@@ -3,7 +3,7 @@ package com.jlei.pointservice.models;
 import lombok.Data;
 
 @Data
-public class Points {
+public class Payer {
   String payer;
   int points;
 }
