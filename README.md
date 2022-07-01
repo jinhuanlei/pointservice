@@ -45,7 +45,7 @@ mvn test
 ### Option 2: Run the service by Docker
 
 ```
-docker run -p 8080:8080 jinhuanlei/point-service
+docker run --rm -p 8080:8080 jinhuanlei/point-service
 ```
 
 ## Web API
