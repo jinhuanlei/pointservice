@@ -98,3 +98,11 @@ For further reference, please consider the following sections:
 1. Payer cannot go lower than negative points, so first transaction(with the earliest timestamp)with
    negative points will be rejected by server.
 2. Cannot send transaction with 0 point.
+
+## contribute
+
+```
+mvn package
+docker build -t jinhuanlei/point-service .
+docker push jinhuanlei/point-service
+```
