@@ -31,7 +31,7 @@ public class PointService {
     var list = transactionRepository.getAllAvailablePoints();
     var payerMap = new HashMap<String, Integer>();
     int index = 0;
-
+    // loop through and deduct all availability points to match with point usage
     while (index < list.size() && spent > 0) {
       var p = list.get(index);
       assert p.getRemain() > 0;
