@@ -51,14 +51,19 @@ docker run --rm -p 8080:8080 jinhuanlei/point-service
 ## Web API
 
 ### transaction endpoints
+
 Add a transaction `POST /transactions`
 
-
 ```json
-{ "payer": "DANNON", "points": 200, "timestamp": "2020-10-31T15:00:00Z" }
+{
+  "payer": "DANNON",
+  "points": 200,
+  "timestamp": "2020-10-31T15:00:00Z"
+}
 ```
 
-Example: 
+Example:
+
 ```
 curl --location --request POST 'localhost:8080/transactions' \
 --header 'Content-Type: application/json' \
@@ -66,6 +71,7 @@ curl --location --request POST 'localhost:8080/transactions' \
 ```
 
 ### Points endpoints
+
 Get points: `GET /points`
 
 ```
@@ -80,7 +86,6 @@ curl --location --request POST 'localhost:8080/points' \
 --data-raw '{ "points": 1 }'
 ```
 
-
 ### Trouble Shooting
 
 For further reference, please consider the following sections:
@@ -90,6 +95,6 @@ For further reference, please consider the following sections:
 
 ## Assumptions
 
-1. Payer cannot go lower than negative points, so first transaction(with the earliest timestamp)
-   will be rejected by server.
+1. Payer cannot go lower than negative points, so first transaction(with the earliest timestamp)with
+   negative points will be rejected by server.
 2. Cannot send transaction with 0 point.

@@ -92,16 +92,19 @@ public class TransactionRepository {
     var payerTransactions = getTransactionsByPayer(payer);
     List<Point> temp = new ArrayList<>();
     for (Transaction t : payerTransactions) {
+      // we assume first transaction with the earliest timestamp has to be positive
       if (temp.size() == 0 || t.getPoints() > 0) {
         var p = Point.builder().points(t.getPoints()).payer(t.getPayer()).remain(t.getPoints())
             .timestamp(t.getTimestamp()).build();
         temp.add(p);
       } else if (t.getPoints() == 0) {
+        // no transaction should have zero points
         throw new RuntimeException("Transaction should not contain zero points");
       } else if (t.getPoints() < 0) {
         assert temp.size() > 0;
         int cur = t.getPoints();
         int index = 0;
+        // calculate remaining points
         while (index < temp.size() && cur < 0) {
           Point p = temp.get(index);
           assert p.getRemain() > 0;
@@ -116,6 +119,7 @@ public class TransactionRepository {
         }
       }
     }
+    // only keep the transaction with remain points Left
     List<Point> res = new ArrayList<>();
     for (Point p : temp) {
       if (p.getRemain() > 0) {
