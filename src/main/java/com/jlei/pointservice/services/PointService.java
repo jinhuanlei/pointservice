@@ -61,10 +61,6 @@ public class PointService {
     payerMap.put(payer, points);
   }
 
-  public void createSpendingTransaction() {
-
-  }
-
   public List<Payer> getAllRemainingPoints() {
     var map = transactionRepository.getPointsGroupByPayer();
     var list = new ArrayList<Payer>();

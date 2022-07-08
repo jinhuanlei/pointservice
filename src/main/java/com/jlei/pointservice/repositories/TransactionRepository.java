@@ -84,10 +84,6 @@ public class TransactionRepository {
     return res;
   }
 
-  public void sort(List<Point> list) {
-
-  }
-
   public List<Point> getAvailablePointsByPayer(String payer) {
     var payerTransactions = getTransactionsByPayer(payer);
     List<Point> temp = new ArrayList<>();
